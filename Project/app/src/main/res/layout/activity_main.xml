@@ -15,4 +15,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/buttonGyro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="GonClick"
+        android:text="Gyroscope"
+        tools:layout_editor_absoluteX="56dp"
+        tools:layout_editor_absoluteY="356dp" />
+
+    <Button
+        android:id="@+id/buttonAccel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accelerometer"
+        tools:layout_editor_absoluteX="230dp"
+        tools:layout_editor_absoluteY="356dp" />
+
 </android.support.constraint.ConstraintLayout>
