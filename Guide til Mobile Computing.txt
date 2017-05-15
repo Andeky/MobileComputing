@@ -1,0 +1,39 @@
+Guide:
+
+Tilslut telefon via usb
+
+I commando prompten (cmd)
+Navigér til platform-tools under android mappen
+(På min (Jacob) er adressen, D:\AppData\Local\Android\sdk\platform-tools)
+
+Hvis man her skriver 'adb logcat' skulle den meget gerne printe
+alt debuginformation i consollen. (afbryd med control-c)
+
+-----------------------------------------
+
+Denne information skal videregives til en -jar fil, altså
+en compilet java fil. Så der skal bygges sådan én
+
+----------------------------------------
+
+I eclipse kan man omdanne en Java fil til en Jar fil på følgende måde
+
+Tryk på File -> Export -> Java -> Runnable JAR File ->
+
+under launch configuration vælg, "ConsoleReader - MobileComputing"
+
+under export destination, vælg hvor jar filen skal gemmes, og hvad den skal kaldes. (fx C:\Users\xxxx\Desktop\driver)
+
+----------------------------------------
+
+I commando prompten (cmd)
+Navigér til platform-tools under android mappen (samme som før)
+(På min (Jacob) er adressen, D:\AppData\Local\Android\sdk\platform-tools)
+
+Skriv følgende:
+
+adb logcat | java -jar 'fulde adresse på jar filen'
+
+
+(på min skriver jeg)
+adb logcat | java -jar C\:Users\Jacob\Desktop\driver.jar
