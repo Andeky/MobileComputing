@@ -7,10 +7,13 @@ import java.awt.event.InputEvent;
 public class MouseHandler  {
 
 	private Robot robot;
+	private LeftClickHolder leftClickHolder;
 
 	public MouseHandler() throws Exception{
 
 		robot = new Robot();
+		leftClickHolder = new LeftClickHolder();
+		
 	}
 
 	public void moveMouse(int dx, int dy){
@@ -37,6 +40,37 @@ public class MouseHandler  {
 	
 	public void scroll(int scrollValue){
 		robot.mouseWheel(scrollValue);
+	}
+	
+	public void leftClickHold(){
+
+		leftClickHolder.holdDown();
+	}
+	
+	public void leftClickRelease(){
+		leftClickHolder.release();
+	}
+	
+	private class LeftClickHolder implements Runnable{
+
+		private boolean holdDown = false;
+		
+		@Override
+		public void run() {
+	
+			while(holdDown){
+				robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+			}			
+		}
+		
+		private void holdDown(){
+			holdDown = true;
+			run();
+		}
+		
+		private void release(){
+			holdDown = false;
+		}
 	}
 	
 	// Access the current x-position of the cursor

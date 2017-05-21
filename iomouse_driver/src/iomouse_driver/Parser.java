@@ -3,9 +3,12 @@ package iomouse_driver;
 public class Parser {
 	
 	private MouseHandler mouseHandler;
+	private long timeStampDriver;
 	
 	public Parser() throws Exception{
 		mouseHandler = new MouseHandler();
+		timeStampDriver = System.currentTimeMillis();
+		// time stamps do not match with android device
 	}
 	
 	public void parseLine(String string){
@@ -17,14 +20,43 @@ public class Parser {
 			
 			String command = parts[1];
 			parseMouseCommand(command);
+			//parseTimeStamp(command);
 			
 		}
 		else{
-			// Given string is noise to the driver
-			
+			// Given string is noise to the driver	
 		}
 			
 	}
+	
+	
+//	private void parseTimeStamp(String command){
+//		
+//		String[] parts;
+//		
+//		if( (parts = command.split("moveMouse ")).length > 1){
+//			
+//			Long timeStampCommand = Long.parseLong(parts[0]);
+//			
+//			if (timeStampCommand > timeStampDriver){
+//				
+//				// only carry out mouse command, if it was
+//				// logged after the driver was initialised
+//				String remaining = parts[1];
+//				
+//				
+//				for(int i = 2; i < parts.length; i++){
+//					
+//					remaining += "" + parts[i];
+//				}
+//				
+//				parseMouseCommand(remaining);
+//				
+//			}
+//		}
+//	}
+	
+	//private void parseTimeStamp()
 	
 	private void parseMouseCommand(String command){
 		
@@ -58,6 +90,16 @@ public class Parser {
 			
 			String scrollCommand = parts[1];
 			parseScroll(scrollCommand);
+		}
+		
+		else if( (parts = command.split("leftClickHold ")).length > 1){
+			System.out.println("left click hold");
+			mouseHandler.leftClickHold();
+		}
+		
+		else if( (parts = command.split("leftClickRelease ")).length > 1){
+			System.out.println("left click release");
+			mouseHandler.leftClickRelease();
 		}
 		
 		else{

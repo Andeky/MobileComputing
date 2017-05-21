@@ -9,12 +9,13 @@ public class Main {
 	 * main file of the iomouse driver
 	 * @throws Exception 
 	 */
+	
 	public static void main(String[] args) throws Exception{
 
 		InputStreamReader isReader = new InputStreamReader(System.in);
 		BufferedReader bufReader = new BufferedReader(isReader);
 		Parser parser = new Parser();
-		
+
 		while(true){
 		    try {
 		        String inputStr = null;
