@@ -11,11 +11,11 @@ public class MouseCommands {
     private static final String appTag = "IO_MOUSE_TAG";
     private static final String moveMouse = "moveMouse ";
     private static final String leftClick = "leftClick ";
-    private static final String rightClick = "rightClick";
-    private static final String thirdButton = "thirdButton";
+    private static final String rightClick = "rightClick ";
+    private static final String middleClick = "middleClick ";
     private static final String scroll = "scroll ";
-    private static final String leftClickHold = "leftClickHold";
-    private static final String leftClickRelease = "leftClickRelease";
+    private static final String leftClickHold = "leftHold ";
+    private static final String leftClickRelease = "leftRelease ";
 
 
     public static void moveMouse(int dx, int dy){
@@ -30,8 +30,8 @@ public class MouseCommands {
         Log.d(appTag, rightClick);
     }
 
-    public static void thirdBurron(){
-        Log.d(appTag, thirdButton);
+    public static void middleClick(){
+        Log.d(appTag, middleClick);
     }
 
     public static void scroll(int scrollValue){
@@ -42,7 +42,7 @@ public class MouseCommands {
         Log.d(appTag, leftClickHold);
     }
 
-    public static void setLeftClickRelease(){
+    public static void leftClickRelease(){
         Log.d(appTag, leftClickRelease);
     }
 
@@ -50,4 +50,3 @@ public class MouseCommands {
         return Long.toString(System.currentTimeMillis()) + " ";
     }
 }
-

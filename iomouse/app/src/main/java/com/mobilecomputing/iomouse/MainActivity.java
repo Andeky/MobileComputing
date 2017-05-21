@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         acceleratorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                Intent intent = new Intent(mainActivity, GyroAndAccelerometerActivity.class);
+                startActivity(intent);
                 // Perform action on click
             }
         });
