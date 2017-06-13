@@ -3,11 +3,9 @@ package iomouse_driver;
 public class Parser {
 	
 	private MouseHandler mouseHandler;
-	private long timeStampDriver;
-	
+
 	public Parser() throws Exception{
 		mouseHandler = new MouseHandler();
-		timeStampDriver = System.currentTimeMillis();
 		// time stamps do not match with android device
 	}
 	
@@ -17,44 +15,15 @@ public class Parser {
 		
 		if( (parts = string.split("IO_MOUSE_TAG: ")).length > 1){
 			// Mouse tag has been registered 
-			
 			String command = parts[1];
 			parseMouseCommand(command);
 			//parseTimeStamp(command);
 			
 		}
 		else{
-			// Given string is noise to the driver	
 		}
 			
 	}
-	
-	
-//	private void parseTimeStamp(String command){
-//		
-//		String[] parts;
-//		
-//		if( (parts = command.split("moveMouse ")).length > 1){
-//			
-//			Long timeStampCommand = Long.parseLong(parts[0]);
-//			
-//			if (timeStampCommand > timeStampDriver){
-//				
-//				// only carry out mouse command, if it was
-//				// logged after the driver was initialised
-//				String remaining = parts[1];
-//				
-//				
-//				for(int i = 2; i < parts.length; i++){
-//					
-//					remaining += "" + parts[i];
-//				}
-//				
-//				parseMouseCommand(remaining);
-//				
-//			}
-//		}
-//	}
 	
 	//private void parseTimeStamp()
 	
@@ -92,14 +61,24 @@ public class Parser {
 			parseScroll(scrollCommand);
 		}
 		
-		else if( (parts = command.split("leftClickHold ")).length > 1){
+		else if( (parts = command.split("leftHold")).length > 1){
 			System.out.println("left click hold");
 			mouseHandler.leftClickHold();
 		}
 		
-		else if( (parts = command.split("leftClickRelease ")).length > 1){
+		else if( (parts = command.split("leftRelease")).length > 1){
 			System.out.println("left click release");
 			mouseHandler.leftClickRelease();
+		}
+		
+		else if( (parts = command.split("placeMouseByPercentage ")).length > 1){
+			String moveCommand = parts[1];
+			parsePlaceMouseByPercentage(moveCommand);
+		}
+		
+		else if( (parts = command.split("placeMouseByPixel ")).length > 1){
+			String moveCommand = parts[1];
+			parsePlaceMouseByPixel(moveCommand);
 		}
 		
 		else{
@@ -117,6 +96,35 @@ public class Parser {
 		System.out.println("dx = " + dx + "   dy = " + dy);
 		
 		mouseHandler.moveMouse(dx,dy);
+	}
+	
+	private void parsePlaceMouseByPixel(String command){
+		
+		String[] parts = command.split(" ");
+		
+		int x = Integer.parseInt(parts[0]);
+		int y = Integer.parseInt(parts[1]);
+		
+		System.out.println("x = " + x + "   y = " + y);
+		
+		mouseHandler.placeMouseByPixel(x, y);
+	}
+	
+	private void parsePlaceMouseByPercentage(String command){
+		
+		String[] parts = command.split(" ");
+		
+		
+		System.out.println(parts[0]);
+		System.out.println(parts[1]);
+		
+		
+		double x = Double.parseDouble(parts[0]);
+		double y = Double.parseDouble(parts[1]);
+		
+		System.out.println("x % = " + x + "   d % = " + y);
+		
+		mouseHandler.placeMouseByPercentage(x,y);
 	}
 	
 	private void parseScroll(String command){

@@ -1,19 +1,23 @@
 package iomouse_driver;
 
+import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 
 public class MouseHandler  {
 
-	private Robot robot;
-	private LeftClickHolder leftClickHolder;
-
+	private Robot robot;	
+    private double screenWidth;
+    private double screenHeight;
+    
 	public MouseHandler() throws Exception{
 
 		robot = new Robot();
-		leftClickHolder = new LeftClickHolder();
-		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		screenWidth = screenSize.getWidth();
+		screenHeight = screenSize.getHeight();
 	}
 
 	public void moveMouse(int dx, int dy){
@@ -29,48 +33,35 @@ public class MouseHandler  {
 	}
 	
 	public void rightClick(){
-		robot.mousePress(InputEvent.BUTTON2_MASK);
-		robot.mouseRelease(InputEvent.BUTTON2_MASK);
+		robot.mousePress(InputEvent.BUTTON3_MASK);
+		robot.mouseRelease(InputEvent.BUTTON3_MASK);
 	}
 	
 	public void thirdButton(){
-		robot.mousePress(InputEvent.BUTTON3_MASK);
-		robot.mouseRelease(InputEvent.BUTTON3_MASK);
+	
+		System.out.println("Third button does nothing");
 	}
 	
 	public void scroll(int scrollValue){
 		robot.mouseWheel(scrollValue);
 	}
 	
+	public void placeMouseByPercentage(double x, double y){
+		double z = 100;
+		robot.mouseMove((int) Math.round(x * screenWidth  / z),
+						(int) Math.round(y * screenHeight / z));		
+	}
+	
+	public void placeMouseByPixel(int x, int y){
+		robot.mouseMove(x, y);
+	}
+	
 	public void leftClickHold(){
-
-		leftClickHolder.holdDown();
+	    robot.mousePress(InputEvent.BUTTON1_MASK);
 	}
 	
 	public void leftClickRelease(){
-		leftClickHolder.release();
-	}
-	
-	private class LeftClickHolder implements Runnable{
-
-		private boolean holdDown = false;
-		
-		@Override
-		public void run() {
-	
-			while(holdDown){
-				robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-			}			
-		}
-		
-		private void holdDown(){
-			holdDown = true;
-			run();
-		}
-		
-		private void release(){
-			holdDown = false;
-		}
+		robot.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 	
 	// Access the current x-position of the cursor

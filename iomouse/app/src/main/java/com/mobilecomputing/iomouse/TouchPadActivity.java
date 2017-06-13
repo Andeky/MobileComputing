@@ -19,6 +19,12 @@ public class TouchPadActivity extends AppCompatActivity implements
     private long multitouchTimeStamp;
     private long multitouchDuration;
     private float sensitivity; // should be a value in shared preferences
+    private float scrollValue = 0;
+
+    private boolean dualTouchActive = false;
+
+    private float yMultiPrevious1;
+    private float yMultiPrevious2;
 
     private GestureDetectorCompat mDetector;
 
@@ -82,8 +88,20 @@ public class TouchPadActivity extends AppCompatActivity implements
 
         int x = (int) event.getX();
         int y = (int) event.getY();
-        int dx = x - xPrevious;
-        int dy = y - yPrevious;
+
+        int dx;
+        int dy;
+
+        if(dualTouchActive){
+            dx = 0;
+            dy = 0;
+        }
+        else{
+            dx = x - xPrevious;
+            dy = y - yPrevious;
+        }
+
+        dualTouchActive = false;
         xPrevious = x;
         yPrevious = y;
 
@@ -93,7 +111,7 @@ public class TouchPadActivity extends AppCompatActivity implements
             dy = scale(dy);
 
             //MouseCommands.moveMouse(dx, dy);
-            if(dx == 0 && dy == 0 || Math.abs(dx) > 100 || Math.abs(dy) > 100){
+            if(dx == 0 && dy == 0){
                 // do not print if the movement is 0
                 // if dx or dy is bigger than 0 it implies faulty multitouch
             }
@@ -114,7 +132,46 @@ public class TouchPadActivity extends AppCompatActivity implements
 
     private boolean handleDualTouch(MotionEvent event){
 
-        Log.d("ABC", "Multitouch detected");
+        float dy1 = 0;
+        float dy2 = 0;
+
+        if(!dualTouchActive){
+            // first iteration of multitouch
+
+            yMultiPrevious1 = event.getY(0);
+            yMultiPrevious2 = event.getY(1);
+        }
+        else{
+            dy1 = event.getY(0) - yMultiPrevious1;
+            dy2 = event.getY(1) - yMultiPrevious2;
+
+            yMultiPrevious1 = event.getY(0);
+            yMultiPrevious2 = event.getY(1);
+        }
+        dualTouchActive = true;
+
+        if(dy1 < 0 && dy2 < 0 || dy1 > 0 && dy2 > 0){
+            int scrollValueTemp = (int) Math.round(Math.sqrt(Math.abs(dy1 + dy2) / 50f) / 1.5f);
+
+            if(dy1 + dy2 < 0){
+                scrollValueTemp = -scrollValueTemp;
+            }
+
+            scrollValue += scrollValueTemp;
+
+            while(scrollValue >= 1){
+                scrollValue--;
+                MouseCommands.scroll(1);
+            }
+
+            while(scrollValue <= -1){
+                scrollValue++;
+                MouseCommands.scroll(-1);
+            }
+        }
+
+        Log.d("ABC", Float.toString(dy1) + " " + Float.toString(dy2));
+
         Long dt = System.currentTimeMillis() - timeStamp;
         timeStamp = System.currentTimeMillis();
         multitouchDuration += dt;
@@ -144,7 +201,7 @@ public class TouchPadActivity extends AppCompatActivity implements
             Handler handler = new Handler();
             long timeStampDPL = System.currentTimeMillis();
 
-            if(screenCurrentlyTouched == false){
+            if(!screenCurrentlyTouched){
 
                 if(timeStampDPL - timeStampCreatedDPL < 100){
                     // valid double tap
